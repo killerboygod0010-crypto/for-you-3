@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Emoji Love Game 💖</title>
+
+<style>
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+    text-align:center;
+    color:white;
+}
+
+/* GAME SECTION */
+#gamePage{
+    padding:30px;
+}
+
+.game{
+    display:grid;
+    grid-template-columns:repeat(4,70px);
+    gap:12px;
+    justify-content:center;
+    margin-top:25px;
+}
+
+.card{
+    height:70px;
+    background:white;
+    border-radius:14px;
+    font-size:34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    color:black;
+}
+
+/* MESSAGE PAGE */
+#messagePage{
+    display:none;
+    padding:40px;
+}
+
+.box{
+    background: rgba(255,255,255,0.2);
+    padding:30px;
+    border-radius:20px;
+    max-width:420px;
+    margin:auto;
+}
+</style>
+</head>
+
+<body>
+
+<!-- GAME PAGE -->
+<div id="gamePage">
+    <h1>💗 Match the Emojis 💗</h1>
+    <p>Complete the game to unlock a surprise 👀✨</p>
+
+    <div class="game" id="game"></div>
+</div>
+
+<!-- MESSAGE PAGE -->
+<div id="messagePage">
+    <div class="box">
+        <h1>💖 Surprise 💖</h1>
+        <p>
+            You completed the game,<br>
+            but honestly…<br><br>
+            <b>you already completed my life 🥺💗</b><br><br>
+            This game was small,<br>
+            but my feelings for you are not 🌸✨<br><br>
+            Always yours 💕
+        </p>
+    </div>
+</div>
+
+<script>
+const emojis = ["💖","💖","😍","😍","😘","😘","🌸","🌸","🦋","🦋","🎀","🎀","❤️","❤️","💫","💫"];
+emojis.sort(() => Math.random() - 0.5);
+
+const game = document.getElementById("game");
+const gamePage = document.getElementById("gamePage");
+const messagePage = document.getElementById("messagePage");
+
+let first=null, second=null, lock=false, matched=0;
+
+emojis.forEach(emoji=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.textContent="❓";
+
+    card.onclick=()=>{
+        if(lock || card===first || card.textContent!=="❓") return;
+        card.textContent=emoji;
+
+        if(!first){
+            first=card;
+        }else{
+            second=card;
+            lock=true;
+
+            if(first.textContent===second.textContent){
+                matched++;
+                reset();
+
+                if(matched===emojis.length/2){
+                    setTimeout(()=>{
+                        gamePage.style.display="none";
+                        messagePage.style.display="block";
+                    },800);
+                }
+            }else{
+                setTimeout(()=>{
+                    first.textContent="❓";
+                    second.textContent="❓";
+                    reset();
+                },700);
+            }
+        }
+    };
+
+    game.appendChild(card);
+});
+
+function reset(){
+    first=null;
+    second=null;
+    lock=false;
+}
+</script>
+
+</body>
+</html>
+
+
